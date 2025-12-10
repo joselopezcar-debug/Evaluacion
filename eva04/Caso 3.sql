@@ -33,13 +33,27 @@ BEGIN
 END;
 /
 
+SET SERVEROUTPUT ON;
 DECLARE
-CURSOR c_salariobase (deptno NUMBER) IS
-    SELECT NOMBRE, SALARIO
-    FROM EMPLEADOS
-    WHERE SALARIO > c_salariobase;
+    CURSOR c_salariobase (p_salario NUMBER) IS
+        SELECT NOMBRE, SALARIO
+        FROM EMPLEADOS
+        WHERE SALARIO > p_salario;
+
+    v_emp c_salariobase%ROWTYPE;
 BEGIN
-    OPEN c_salariobase (300);
+    OPEN c_salariobase(300);
+
+    LOOP
+        FETCH c_salariobase INTO v_emp;
+        EXIT WHEN c_salariobase%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Empleado: ' || v_emp.NOMBRE || 
+            ' - Salario: ' || v_emp.SALARIO
+        );
+    END LOOP;
+
     CLOSE c_salariobase;
 END;
 /

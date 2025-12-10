@@ -1,14 +1,29 @@
-@Tabla.sql
-
-DECLARE
-    CREATE OR REPLACE FUNCTION get_sal 
-    (p_id employees.employee_id%TYPE) RETURN NUMBER IS
-    v_sal employees.salary%TYPE := 0;
+CREATE OR REPLACE FUNCTION CALCULAR_BONIFICACION (
+    p_id EMPLEADOS.ID_EMPLEADO%TYPE
+) 
+RETURN NUMBER
+IS
+    v_salario EMPLEADOS.SALARIO%TYPE;
 BEGIN
-    ELECT salary
-    INTO v_sal
-    FROM employees
-    WHERE employee_id = p_id;
-    RETURN v_sal;
+    SELECT SALARIO
+    INTO v_salario
+    FROM EMPLEADOS
+    WHERE ID_EMPLEADO = p_id;
+
+    RETURN v_salario * 0.10;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+END;
+/
+
+SET SERVEROUTPUT ON;
+DECLARE
+    v_bono NUMBER;
+BEGIN
+    v_bono := CALCULAR_BONIFICACION(1);
+
+    DBMS_OUTPUT.PUT_LINE('La bonificación es: ' || v_bono);
 END;
 /
