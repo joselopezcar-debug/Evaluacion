@@ -40,17 +40,17 @@ DECLARE
         FROM EMPLEADOS
         WHERE SALARIO > p_salario;
 
-    v_emp c_salariobase%ROWTYPE;
+    v_empleados c_salariobase%ROWTYPE;
 BEGIN
     OPEN c_salariobase(300);
 
     LOOP
-        FETCH c_salariobase INTO v_emp;
+        FETCH c_salariobase INTO v_empleados;
         EXIT WHEN c_salariobase%NOTFOUND;
 
         DBMS_OUTPUT.PUT_LINE(
-            'Empleado: ' || v_emp.NOMBRE || 
-            ' - Salario: ' || v_emp.SALARIO
+            'Empleado: ' || v_empleados.NOMBRE || 
+            ' - Salario: ' || v_empleados.SALARIO
         );
     END LOOP;
 
